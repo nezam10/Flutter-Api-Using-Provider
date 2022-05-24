@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_api_using_provider/model_class/data_model.dart';
 import 'package:flutter_api_using_provider/provider_class/data.dart';
-import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 class ViewScreen extends StatefulWidget {
@@ -13,6 +11,8 @@ class ViewScreen extends StatefulWidget {
 
 class _ViewScreenState extends State<ViewScreen> {
   // Future<DataModel> getData(contex) async {
+  List<Data> list_data = [];
+
   @override
   void initState() {
     // TODO: implement initState
@@ -23,16 +23,58 @@ class _ViewScreenState extends State<ViewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final data = Provider.of<DataModel>(context);
+    final data = Provider.of<Data>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text("Network Data"),
       ),
       body: Center(
         child: Container(
-          child: Text(data.title.toString()),
+          child: FutureBuilder(
+            future: Data().getData(context),
+            builder: (context, AsyncSnapshot snapshot) {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                  itemCount: 1,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(data.dataModel!.title.toString()),
+                      leading: Text(data.dataModel!.id.toString()),
+                    );
+                  },
+                );
+              }
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            },
+          ),
         ),
       ),
     );
   }
 }
+
+
+
+
+
+// FutureBuilder(
+//                 future: Data().getData(context),
+//                 builder: (context, AsyncSnapshot snapshot) {
+//                   if(snapshot.hasData){
+//                     return ListView.builder(
+//                       itemCount:,
+//                       itemBuilder: (context, index){
+//                         return ListTile(
+//                 title: Text(data.dataModel!.title.toString()),
+//                 leading: Text(data.dataModel!.id.toString()),
+//               );
+//                       },
+//                       );
+//                   }
+//                   return Center(
+//                     child: CircularProgressIndicator(),
+//                   );
+//                 },
+//               )
