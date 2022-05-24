@@ -5,7 +5,7 @@ import 'package:flutter_api_using_provider/model_class/data_model.dart';
 import 'package:http/http.dart' as http;
 
 class Data extends ChangeNotifier {
-  late DataModel dataModel;
+  DataModel? dataModel;
 
   fetchData(context) async {
     dataModel = await getData(context);
@@ -13,8 +13,8 @@ class Data extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<DataModel> getData(contex) async {
-    DataModel dataModel;
+  Future<DataModel?> getData(contex) async {
+    DataModel? dataModel;
     try {
       final response = await http
           .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
@@ -27,7 +27,7 @@ class Data extends ChangeNotifier {
     } catch (e) {
       print(e.toString());
     }
-    return DataModel();
+    return dataModel;
   }
 }
 
