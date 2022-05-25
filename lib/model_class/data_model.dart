@@ -1,13 +1,32 @@
+import 'dart:convert';
+
 class DataModel {
-  final int? id;
-  final int? userId;
-  final String? title;
-  DataModel({this.id, this.userId, this.title});
-  factory DataModel.fromJson(Map<String, dynamic> json) {
-    return DataModel(
-      id: json["id"],
-      userId: json["userId"],
-      title: json["title"],
-    );
-  }
+  DataModel({
+    required this.userId,
+    required this.id,
+    required this.title,
+    required this.body,
+  });
+
+  var userId;
+  var id;
+  var title;
+  var body;
+
+  factory DataModel.fromJson(Map<String, dynamic> json) => DataModel(
+        userId: json["userId"] ?? "",
+        id: json["id"],
+        title: json["title"] ?? "",
+        body: json["body"] ?? "",
+      );
+
+  Map<String, dynamic> toJson() => {
+        "userId": userId,
+        "id": id,
+        "title": title,
+        "body": body,
+      };
 }
+
+List<DataModel> userModelFromJson(String str) =>
+    List<DataModel>.from(json.decode(str).map((x) => DataModel.fromJson(x)));
